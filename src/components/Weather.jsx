@@ -1,7 +1,7 @@
 const Weather = ({weather, message}) => {
     return (
         <div className={'infoWeath'}>
-            {!message &&
+            {!message && weather &&
                 <>
                     <p>Location: {weather.country}, {weather.city}</p>
                     <p>Temp: {weather.temp}</p>

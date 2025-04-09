@@ -1,34 +1,21 @@
-import React, {useState} from 'react';
+import React from 'react';
 import Form from "./Form.jsx";
 import Weather from "./Weather.jsx";
-import {api_key, base_url} from "../utils/constants.js";
+import {useDispatch, useSelector} from "react-redux";
+import {fetchWeather} from "../add/weatherThunk.js";
 
 const Data = () => {
-    const [weatherInfo, setWeatherInfo] = useState({});
-    const [message, setMessage] = useState('Enter city name');
+    const dispatch = useDispatch();
+    const {weather, message} = useSelector(state => state.weather);
 
     const getWeather = async (city) => {
-        try {
-            const res = await fetch(`${base_url}?q=${city}&appid=${api_key}&units=metric`);
-            const data = await res.json();
-            setWeatherInfo({
-                            city: data.name,
-                            country: data.sys.country,
-                            temp: data.main.temp,
-                            pressure: data.main.pressure,
-                            sunset: data.sys.sunset,
-                        });
-                        setMessage('');
-        }catch (e){
-            console.log(e)
-            setMessage('Enter correct city name');
-        }
+        dispatch(fetchWeather(city));
     }
 
     return (
         <div>
             <Form getWeather={getWeather}/>
-            <Weather weather={weatherInfo} message={message}/>
+            <Weather weather={weather} message={message}/>
         </div>
     );
 };
